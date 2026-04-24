@@ -1,0 +1,4 @@
+# Large local media (use CDN or object storage in production)
+*.mp4
+*.MOV
+*.mov
