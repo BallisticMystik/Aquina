@@ -3,4 +3,7 @@
 *.MOV
 *.mov
 
+# Allow the hero loop video — small enough to ship with the repo
+!waterbackground30.mp4
+
 node_modules/
