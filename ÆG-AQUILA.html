@@ -33,7 +33,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root {
     --bg: #01030a;
@@ -55,10 +55,16 @@
     --surface: rgba(5, 8, 20, 0.55);
     --surface-solid: #02081c;
     --serif: 'Fraunces', 'Times New Roman', serif;
-    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
     --gutter: clamp(20px, 4vw, 56px);
     --maxw: 1360px;
+    --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @supports (height: 100dvh) {
+    .stage { height: 100dvh; min-height: 100dvh; }
+    .stage-pin { height: 200dvh; }
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -80,6 +86,47 @@
   ::selection { background: var(--accent); color: #051117; }
 
   a { color: inherit; text-decoration: none; }
+
+  /* Inline SVG icons */
+  .ic { width: 1em; height: 1em; flex-shrink: 0; vertical-align: -.125em; }
+  .ic--lg { width: 1.2em; height: 1.2em; }
+  .ic--inline { display: inline-block; margin-right: .35em; }
+
+  /* ───────────────────── WATER GLASS OVERLAY ───────────────────── */
+  /* Full-page WebGL caustic overlay. Fixed position, screen-blended,
+     non-interactive. Mouse + device-orientation drive a tilt uniform. */
+  .water-glass {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9000;
+    mix-blend-mode: screen;
+    opacity: 0.55;
+    will-change: transform;
+  }
+  /* CSS-only fallback when WebGL is unavailable: animated SVG turbulence */
+  .water-glass--fallback {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9000;
+    mix-blend-mode: screen;
+    opacity: 0.18;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(107,224,255,.4), transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(159,240,255,.3), transparent 55%);
+    filter: url(#waterFallbackTurb);
+    animation: waterDrift 22s ease-in-out infinite alternate;
+  }
+  @keyframes waterDrift {
+    from { transform: translate3d(-2%, -1%, 0) scale(1.05); }
+    to   { transform: translate3d( 2%,  1%, 0) scale(1.08); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .water-glass, .water-glass--fallback { display: none; }
+  }
 
   /* ───────────────────── NAV ───────────────────── */
   .nav {
@@ -132,7 +179,7 @@
     padding: 10px 16px;
     border: 1px solid var(--line-strong);
     border-radius: 999px;
-    transition: all .25s ease;
+    transition: all .3s var(--ease-spring);
   }
   .nav__cta:hover {
     border-color: var(--accent);
@@ -645,7 +692,7 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all .3s ease;
+    transition: all .35s var(--ease-spring);
     text-align: left;
     display: flex;
     align-items: baseline;
@@ -680,7 +727,7 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
-    transition: background .3s ease;
+    transition: background .35s var(--ease-spring);
     position: relative;
     min-height: 260px;
   }
@@ -724,7 +771,7 @@
   .mode-card__arrow {
     color: var(--accent);
     opacity: 0.4;
-    transition: all .3s ease;
+    transition: all .35s var(--ease-spring);
   }
   .tag {
     display: inline-block;
@@ -755,21 +802,61 @@
   }
   .profiles__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(320px, auto);
+    gap: 16px;
   }
   .profile {
+    position: relative;
     background: var(--bg);
     border: 1px solid var(--line);
-    padding: 36px;
+    padding: 32px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    transition: transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s;
+    gap: 22px;
+    grid-column: span 2;
+    transition: transform .5s var(--ease-spring), border-color .35s var(--ease-spring);
+    isolation: isolate;
+    overflow: hidden;
   }
+  /* Spotlight border tracking the cursor */
+  .profile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      400px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(107, 224, 255, .14),
+      transparent 55%);
+    opacity: 0;
+    transition: opacity .4s var(--ease-spring);
+    z-index: 0;
+  }
+  .profile > * { position: relative; z-index: 1; }
+  .profile:hover::before { opacity: 1; }
   .profile:hover {
     border-color: var(--line-strong);
     transform: translateY(-3px);
+  }
+  /* Asymmetric tile sizing — bento layout */
+  .profile--hero { grid-column: span 4; grid-row: span 2; }
+  .profile--wide { grid-column: span 3; }
+  .profile--tall { grid-column: span 3; grid-row: span 2; }
+  @media (max-width: 960px) {
+    .profiles__grid { grid-template-columns: repeat(2, 1fr); }
+    .profile,
+    .profile--hero,
+    .profile--wide,
+    .profile--tall { grid-column: span 2; grid-row: auto; }
+  }
+  @media (max-width: 600px) {
+    .profiles__grid { grid-template-columns: 1fr; }
+    .profile,
+    .profile--hero,
+    .profile--wide,
+    .profile--tall { grid-column: span 1; }
   }
   .profile__head {
     display: flex;
@@ -931,7 +1018,7 @@
     font-family: var(--serif);
     font-size: 16px;
     letter-spacing: -0.01em;
-    transition: all .25s ease;
+    transition: all .3s var(--ease-spring);
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -968,7 +1055,7 @@
     font-family: var(--mono);
     font-size: 13px;
     letter-spacing: 0.06em;
-    transition: all .25s ease;
+    transition: all .3s var(--ease-spring);
   }
   .forge__batch-btn:hover { border-color: var(--line-strong); color: var(--ink); }
   .forge__batch-btn.active {
@@ -992,7 +1079,7 @@
     font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    transition: all .25s ease;
+    transition: all .3s var(--ease-spring);
   }
   .forge__method-btn:hover { border-color: var(--line-strong); color: var(--ink); }
   .forge__method-btn.active {
@@ -1161,7 +1248,7 @@
     gap: 32px;
     padding: 28px 32px;
     border-bottom: 1px solid var(--line);
-    transition: background .3s ease;
+    transition: background .35s var(--ease-spring);
     align-items: start;
   }
   .region:last-child { border-bottom: none; }
@@ -1478,7 +1565,7 @@
     border: 1px solid var(--line);
     background: var(--bg);
     align-items: center;
-    transition: all .3s ease;
+    transition: all .35s var(--ease-spring);
   }
   .layer:hover {
     border-color: var(--line-strong);
@@ -1610,6 +1697,29 @@
 </style>
 </head>
 <body>
+
+<!-- Icon sprite — referenced via <use href="#icon-name"/> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3 2 21h20L12 3Z"/>
+      <path d="M12 9v6"/><circle cx="12" cy="18" r=".6" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+    </symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3 4 6v6c0 4.5 3.5 8 8 9 4.5-1 8-4.5 8-9V6l-8-3Z"/>
+    </symbol>
+    <symbol id="i-diamond" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2 4 12l8 10 8-10-8-10Z"/><path d="M4 12h16"/>
+    </symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v6"/><path d="M12 15v6"/><path d="M3 12h6"/><path d="M15 12h6"/>
+      <path d="m5 5 3 3"/><path d="m16 16 3 3"/><path d="m19 5-3 3"/><path d="m8 16-3 3"/>
+    </symbol>
+  </defs>
+</svg>
 
 <!-- ───────────────────── NAV ───────────────────── -->
 <nav class="nav">
@@ -1807,49 +1917,49 @@
         <div class="mode-card__num">Mode 01</div>
         <h3 class="mode-card__title">Daily Hydration Support</h3>
         <p class="mode-card__purpose">Build practical daily water intake routines tuned to body weight, training, weather, and sweat level.</p>
-        <div class="mode-card__meta"><span>Routine · Timing · Electrolytes</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Routine · Timing · Electrolytes</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 02</div>
         <h3 class="mode-card__title">Blackfeather.run Hydration</h3>
         <p class="mode-card__purpose">Challenge-specific pre/during/post planning for the Blackfeather protocol and its disciplines.</p>
-        <div class="mode-card__meta"><span class="tag tag--accent">Signature</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span class="tag tag--accent">Signature</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 03</div>
         <h3 class="mode-card__title">Endurance / Sweat-Loss</h3>
         <p class="mode-card__purpose">Duration-based fluid and electrolyte guidance with overhydration safety thresholds.</p>
-        <div class="mode-card__meta"><span>Fluid · Sodium · Safety</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Fluid · Sodium · Safety</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 04</div>
         <h3 class="mode-card__title">Electrolyte Education</h3>
         <p class="mode-card__purpose">Sodium, potassium, magnesium, calcium explained clearly. General education only, no medical dosing.</p>
-        <div class="mode-card__meta"><span>Na · K · Mg · Ca</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Na · K · Mg · Ca</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 05</div>
         <h3 class="mode-card__title">Bottled Water Assessment</h3>
         <p class="mode-card__purpose">Interpret mineral labels for drinking. Multi-dimensional ratings: daily, training, heat, recovery, mixing.</p>
-        <div class="mode-card__meta"><span>Label decoder</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Label decoder</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 06</div>
         <h3 class="mode-card__title">Tap / Filtered / RO</h3>
         <p class="mode-card__purpose">Quality awareness, filter recommendations, and testing guidance for every source.</p>
-        <div class="mode-card__meta"><span>Source audit</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Source audit</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 07</div>
         <h3 class="mode-card__title">Heat and Recovery</h3>
         <p class="mode-card__purpose">Hot-weather and post-sweat frameworks. Red-flag symptom recognition built in.</p>
-        <div class="mode-card__meta"><span class="tag tag--warn">Red-flag aware</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span class="tag tag--warn">Red-flag aware</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 08</div>
         <h3 class="mode-card__title">Routine Builder</h3>
         <p class="mode-card__purpose">Design repeatable morning, training, recovery, and evening hydration habits.</p>
-        <div class="mode-card__meta"><span>Discipline loops</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Discipline loops</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
     </div>
 
@@ -1859,49 +1969,49 @@
         <div class="mode-card__num">Mode 09</div>
         <h3 class="mode-card__title">Brew Water Diagnosis</h3>
         <p class="mode-card__purpose">Diagnose coffee water issues by profile. Flavour, brewing, and equipment risk in one read.</p>
-        <div class="mode-card__meta"><span>Diagnostic</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Diagnostic</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 10</div>
         <h3 class="mode-card__title">Bottled Water for Coffee</h3>
         <p class="mode-card__purpose">Assess bottled water suitability for brewing, with espresso warnings where relevant.</p>
-        <div class="mode-card__meta"><span>Brew rating</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Brew rating</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 11</div>
         <h3 class="mode-card__title">Water Blending</h3>
         <p class="mode-card__purpose">Blend two waters to reach a target mineral profile. Batch-ready recipes.</p>
-        <div class="mode-card__meta"><span>Ratio math</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Ratio math</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 12</div>
         <h3 class="mode-card__title">RO / Distilled Build</h3>
         <p class="mode-card__purpose">Rebuild full mineral profile from a blank slate. Food-grade minerals only, always.</p>
-        <div class="mode-card__meta"><span class="tag tag--accent">AquaForge</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span class="tag tag--accent">AquaForge</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 13</div>
         <h3 class="mode-card__title">Regional Replication</h3>
         <p class="mode-card__purpose">Replicate city water profiles. Melbourne in Tokyo. Oslo in Tucson.</p>
-        <div class="mode-card__meta"><span>Atlas-powered</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Atlas-powered</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 14</div>
         <h3 class="mode-card__title">Espresso-Safe Profile</h3>
         <p class="mode-card__purpose">Machine-safe water targets. Scale and corrosion warnings issued with every output.</p>
-        <div class="mode-card__meta"><span class="tag tag--warn">Safety-gated</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span class="tag tag--warn">Safety-gated</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 15</div>
         <h3 class="mode-card__title">Cold Brew Water</h3>
         <p class="mode-card__purpose">Optimise water for cold brew and concentrate. Extraction and dilution guidance.</p>
-        <div class="mode-card__meta"><span>Concentrate-ready</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span>Concentrate-ready</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
       <article class="mode-card">
         <div class="mode-card__num">Mode 16</div>
         <h3 class="mode-card__title">Café / Roaster Audit</h3>
         <p class="mode-card__purpose">Professional water program for venues. Filter plan, batch plan, staff notes.</p>
-        <div class="mode-card__meta"><span class="tag tag--accent">Commercial</span><span class="mode-card__arrow">→</span></div>
+        <div class="mode-card__meta"><span class="tag tag--accent">Commercial</span><span class="mode-card__arrow"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></span></div>
       </article>
     </div>
   </div>
@@ -1923,7 +2033,7 @@
 
     <div class="profiles__grid">
 
-      <article class="profile">
+      <article class="profile profile--hero">
         <header class="profile__head">
           <div>
             <div class="profile__id">AEG-CLARITY</div>
@@ -1974,7 +2084,7 @@
         <p class="profile__best"><span class="profile__best-label">Best for</span>Brazil, Colombia, milk coffee, chocolate profiles</p>
       </article>
 
-      <article class="profile">
+      <article class="profile profile--tall">
         <header class="profile__head">
           <div>
             <div class="profile__id">AEG-NEON-FRUIT</div>
@@ -2008,7 +2118,7 @@
         <p class="profile__best"><span class="profile__best-label">Best for</span>Cold brew, concentrate, RTD base</p>
       </article>
 
-      <article class="profile">
+      <article class="profile profile--wide">
         <header class="profile__head">
           <div>
             <div class="profile__id">AEG-ESPRESSO-SHIELD</div>
@@ -2023,7 +2133,7 @@
           <div class="stat"><span class="stat__label">Alkalinity</span><span class="stat__value">35–55 <span class="stat__unit">ppm</span></span></div>
         </div>
         <p class="profile__best"><span class="profile__best-label">Best for</span>Espresso machines</p>
-        <div class="profile__warning">⚠ Validate against your specific machine and boiler type before commercial deployment. Espresso boilers are unforgiving of incorrect mineral profiles.</div>
+        <div class="profile__warning"><svg class="ic ic--inline" aria-hidden="true"><use href="#i-warn"/></svg>Validate against your specific machine and boiler type before commercial deployment. Espresso boilers are unforgiving of incorrect mineral profiles.</div>
       </article>
 
     </div>
@@ -2125,7 +2235,7 @@
         </ul>
 
         <div class="forge__disclaimer">
-          <strong>⚠ Educational estimate.</strong> Food-grade minerals only. Verify with a TDS meter and titration. AquaForge is a starting point, not a commercial substitute for calibrated brewing water. Espresso machines require validation per boiler type.
+          <strong><svg class="ic ic--inline" aria-hidden="true"><use href="#i-warn"/></svg>Educational estimate.</strong> Food-grade minerals only. Verify with a TDS meter and titration. AquaForge is a starting point, not a commercial substitute for calibrated brewing water. Espresso machines require validation per boiler type.
         </div>
       </div>
     </div>
@@ -2333,7 +2443,7 @@
 
       <div class="safety__side">
         <aside class="redflag">
-          <h3 class="redflag__title">⚠ Red-Flag Symptoms</h3>
+          <h3 class="redflag__title"><svg class="ic ic--inline" aria-hidden="true"><use href="#i-warn"/></svg>Red-Flag Symptoms</h3>
           <ul class="redflag__list">
             <li>Confusion or disorientation</li>
             <li>Fainting or loss of consciousness</li>
@@ -2341,11 +2451,11 @@
             <li>Persistent vomiting</li>
             <li>Severe weakness</li>
           </ul>
-          <p class="redflag__action">→ Direct immediately to emergency medical care. Do not continue hydration guidance.</p>
+          <p class="redflag__action"><svg class="ic ic--inline" aria-hidden="true"><use href="#i-arrow"/></svg>Direct immediately to emergency medical care. Do not continue hydration guidance.</p>
         </aside>
 
         <aside class="ippanel">
-          <h3 class="ippanel__title">◈ Protected IP</h3>
+          <h3 class="ippanel__title"><svg class="ic ic--inline" aria-hidden="true"><use href="#i-shield"/></svg>Protected IP</h3>
           <ul class="ippanel__list">
             <li>Exact ÆGX20 formulas</li>
             <li>Exact electrolyte sachet recipes</li>
@@ -2482,10 +2592,10 @@
 <!-- ───────────────────── ENGAGE ───────────────────── -->
 <section id="engage">
   <div class="section" style="text-align:center; max-width:880px;">
-    <div class="section__num" style="margin-bottom:32px;">10 — Engage</div>
+    <div class="section__num" style="margin-bottom:32px;">10 — Get the protocol</div>
     <h2 class="section__title" style="font-size:clamp(44px,7vw,96px); margin-bottom:32px;">Control water. <em>Control outcome.</em></h2>
-    <p class="section__lead" style="margin:0 auto 48px; font-size:20px;">ÆG-AQUILA is moving through prototype now. If you brew seriously, train seriously, or run a café, the agent is being built with you in mind.</p>
-    <a href="mailto:engage@blackfeather.run" class="nav__cta" style="font-size:13px; padding:16px 28px; display:inline-block;">Request the early protocol →</a>
+    <p class="section__lead" style="margin:0 auto 48px; font-size:20px;">ÆG-AQUILA is in prototype. If you brew seriously, train seriously, or run a café, the agent is being built with you in the room.</p>
+    <a href="mailto:engage@blackfeather.run" class="nav__cta" style="font-size:13px; padding:16px 28px; display:inline-flex; align-items:center; gap:.6em;">Request the early protocol <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
   </div>
 </section>
 
@@ -2520,6 +2630,20 @@
     <span>General education only · Not medical advice</span>
   </div>
 </footer>
+
+<!-- ───────────────────── WATER GLASS OVERLAY ───────────────────── -->
+<canvas id="waterGlass" class="water-glass" aria-hidden="true"></canvas>
+
+<!-- SVG fallback turbulence (used only if WebGL is unavailable) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="waterFallbackTurb">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="3">
+      <animate attributeName="baseFrequency" dur="20s"
+               values="0.012 0.018;0.018 0.012;0.012 0.018" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" scale="40"/>
+  </filter>
+</svg>
 
 <script>
   // Tab switcher
@@ -2889,6 +3013,185 @@
       } else {
         rafId = requestAnimationFrame(frame);
       }
+    });
+  })();
+
+  /* ───────────────────── PROFILE CARD SPOTLIGHT TRACKER ─────────────────────
+     Sets --mx / --my CSS vars per card based on cursor position so the
+     ::before radial gradient follows the pointer. Skipped on touch devices.
+  */
+  (() => {
+    const cards = document.querySelectorAll('.profile');
+    if (!cards.length) return;
+    if (window.matchMedia('(hover: none)').matches) return;
+    cards.forEach(card => {
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', ((e.clientX - r.left) / r.width  * 100) + '%');
+        card.style.setProperty('--my', ((e.clientY - r.top)  / r.height * 100) + '%');
+      }, { passive: true });
+    });
+  })();
+
+  /* ───────────────────── WATER GLASS · WEBGL CAUSTICS OVERLAY ─────────────────────
+     Full-page fixed overlay. Procedural fbm noise → caustic light pattern,
+     screen-blended over the page. Pointer / device-orientation drive a tilt
+     uniform that parallaxes the pattern, simulating water under glass.
+     Falls back to an SVG-turbulence CSS gradient if WebGL is unavailable.
+     Pauses for prefers-reduced-motion and on tab-hidden.
+  */
+  (() => {
+    const canvas = document.getElementById('waterGlass');
+    if (!canvas) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) { canvas.remove(); return; }
+
+    const gl = canvas.getContext('webgl', { alpha: true, antialias: false, premultipliedAlpha: true, powerPreference: 'low-power' })
+            || canvas.getContext('experimental-webgl', { alpha: true });
+
+    if (!gl) {
+      const fb = document.createElement('div');
+      fb.className = 'water-glass--fallback';
+      fb.setAttribute('aria-hidden', 'true');
+      canvas.replaceWith(fb);
+      return;
+    }
+
+    const VS = `
+      attribute vec2 a;
+      varying vec2 v;
+      void main() { v = a * 0.5 + 0.5; gl_Position = vec4(a, 0.0, 1.0); }
+    `;
+    const FS = `
+      precision mediump float;
+      varying vec2 v;
+      uniform float uT;
+      uniform vec2 uR;
+      uniform vec2 uM;
+      uniform vec2 uTilt;
+
+      float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+      float noise(vec2 p) {
+        vec2 i = floor(p), f = fract(p);
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
+                   mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+      }
+      float fbm(vec2 p) {
+        float s = 0.0, a = 0.5;
+        for (int k = 0; k < 4; k++) { s += a * noise(p); p *= 2.02; a *= 0.5; }
+        return s;
+      }
+
+      void main() {
+        vec2 uv = v;
+        float ar = uR.x / max(uR.y, 1.0);
+        uv.x *= ar;
+        vec2 off = uM * 0.06 + uTilt * 0.10;
+        vec2 p = uv * 2.4 + off;
+        float t = uT * 0.18;
+        float a1 = fbm(p + vec2(t, t * 0.6));
+        float a2 = fbm(p * 1.7 - vec2(t * 0.7, t * 0.3) + 11.0);
+        float c = pow(abs(a1 - a2), 1.4);
+        c = smoothstep(0.04, 0.55, c);
+        vec3 col = mix(vec3(0.04, 0.20, 0.40), vec3(0.55, 0.95, 1.00), c);
+        vec2 vc = vec2(0.5 * ar, 0.5);
+        float vig = 1.0 - smoothstep(0.55, 1.10, length(uv - vc));
+        float alpha = c * 0.22 * vig;
+        gl_FragColor = vec4(col * alpha, alpha);
+      }
+    `;
+
+    function compile(type, src) {
+      const sh = gl.createShader(type);
+      gl.shaderSource(sh, src);
+      gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+        console.warn('water-glass shader error:', gl.getShaderInfoLog(sh));
+        return null;
+      }
+      return sh;
+    }
+    const vs = compile(gl.VERTEX_SHADER, VS);
+    const fs = compile(gl.FRAGMENT_SHADER, FS);
+    if (!vs || !fs) { canvas.remove(); return; }
+
+    const prog = gl.createProgram();
+    gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
+    gl.useProgram(prog);
+
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+    const aLoc = gl.getAttribLocation(prog, 'a');
+    gl.enableVertexAttribArray(aLoc);
+    gl.vertexAttribPointer(aLoc, 2, gl.FLOAT, false, 0, 0);
+
+    const uT  = gl.getUniformLocation(prog, 'uT');
+    const uR  = gl.getUniformLocation(prog, 'uR');
+    const uM  = gl.getUniformLocation(prog, 'uM');
+    const uTl = gl.getUniformLocation(prog, 'uTilt');
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+    let cssW = window.innerWidth, cssH = window.innerHeight;
+    function resize() {
+      const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+      const scale = window.matchMedia('(max-width: 820px)').matches ? 0.5 : 0.65;
+      cssW = window.innerWidth;
+      cssH = window.innerHeight;
+      canvas.width  = Math.max(1, Math.round(cssW * scale * dpr));
+      canvas.height = Math.max(1, Math.round(cssH * scale * dpr));
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    let mx = 0, my = 0, smx = 0, smy = 0;
+    let tx = 0, ty = 0, stx = 0, sty = 0;
+    window.addEventListener('pointermove', (e) => {
+      mx = (e.clientX / cssW) * 2 - 1;
+      my = (e.clientY / cssH) * 2 - 1;
+    }, { passive: true });
+
+    function onOrient(e) {
+      if (e.gamma == null || e.beta == null) return;
+      tx = Math.max(-1, Math.min(1, (e.gamma || 0) / 30));
+      ty = Math.max(-1, Math.min(1, ((e.beta  || 0) - 45) / 30));
+    }
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', onOrient, { passive: true });
+    }
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const askOnce = () => {
+        DeviceOrientationEvent.requestPermission()
+          .then(r => { if (r === 'granted') window.addEventListener('deviceorientation', onOrient, { passive: true }); })
+          .catch(() => {});
+      };
+      window.addEventListener('touchstart', askOnce, { once: true, passive: true });
+    }
+
+    let rafId, t0 = performance.now();
+    function tick(now) {
+      smx += (mx - smx) * 0.06;
+      smy += (my - smy) * 0.06;
+      stx += (tx - stx) * 0.05;
+      sty += (ty - sty) * 0.05;
+      gl.uniform1f(uT, (now - t0) / 1000);
+      gl.uniform2f(uR, canvas.width, canvas.height);
+      gl.uniform2f(uM, smx, smy);
+      gl.uniform2f(uTl, stx, sty);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      rafId = requestAnimationFrame(tick);
+    }
+    rafId = requestAnimationFrame(tick);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { cancelAnimationFrame(rafId); rafId = null; }
+      else if (!rafId) rafId = requestAnimationFrame(tick);
     });
   })();
 </script>
