@@ -369,12 +369,21 @@
     height: 1px;
     background: linear-gradient(to right, transparent, var(--accent), transparent);
   }
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
   .stage__logo {
-    width: clamp(96px, 18vw, 180px);
+    width: clamp(220px, 36vw, 440px);
     height: auto;
     margin-bottom: 28px;
-    filter: drop-shadow(0 6px 22px rgba(0, 60, 120, .55))
-            drop-shadow(0 0 40px rgba(107, 224, 255, .25));
+    filter: drop-shadow(0 8px 28px rgba(0, 60, 120, .6))
+            drop-shadow(0 0 48px rgba(107, 224, 255, .3));
   }
   .stage__title {
     font-family: var(--serif);
@@ -405,18 +414,18 @@
   .x02-mark {
     display: inline-block;
     font-family: var(--mono);
-    font-size: clamp(11px, 1.4vw, 18px);
-    font-weight: 500;
-    letter-spacing: 0.28em;
+    font-size: clamp(14px, 1.7vw, 20px);
+    font-weight: 600;
+    letter-spacing: 0.32em;
     color: var(--accent-2);
-    vertical-align: super;
-    margin-left: 12px;
-    padding: 4px 8px;
-    border: 1px solid rgba(159, 240, 255, .35);
+    margin: 16px 0 24px;
+    padding: 6px 14px;
+    border: 1px solid rgba(159, 240, 255, .4);
     border-radius: 3px;
-    background: rgba(107, 224, 255, .06);
+    background: rgba(107, 224, 255, .08);
     text-shadow: 0 0 18px rgba(107, 224, 255, .55);
-    transform: translateY(-0.4em);
+    box-shadow: 0 0 24px rgba(107, 224, 255, .12) inset,
+                0 4px 22px rgba(0, 0, 0, .35);
   }
   .stage__tagline {
     font-family: var(--serif);
@@ -1692,19 +1701,17 @@
 
   <!-- Hero content overlay -->
   <div class="stage__content">
+    <h1 class="sr-only">ÆG-AQUILA — Hydration Intelligence Agent</h1>
     <picture>
       <source srcset="AEGG222FAVI-400.webp" media="(max-width: 600px)" />
       <source srcset="AEGG222FAVI-800.webp" />
-      <img class="stage__logo" src="AEGG222FAVI-800.webp" alt="ÆG mark" width="800" height="504" />
+      <img class="stage__logo" src="AEGG222FAVI-800.webp" alt="ÆG-AQUILA" width="800" height="504" />
     </picture>
     <div class="stage__eyebrow">
       <span class="status-dot"></span>
       Hydration Intelligence · v1.0
     </div>
-    <h1 class="stage__title">
-      <span class="ligature">ÆG</span><span class="thin">—</span>AQUILA
-      <sub class="x02-mark">X02</sub>
-    </h1>
+    <div class="x02-mark">X02</div>
     <p class="stage__tagline">Guard your water. Master your flow.</p>
   </div>
 
