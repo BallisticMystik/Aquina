@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ÆG-AQUILA — Hydration Intelligence Agent</title>
+<meta name="description" content="Guard your water. Master your flow. ÆG-AQUILA is the hydration-first water intelligence agent from Æ-G / Blackfeather.run." />
+<meta name="theme-color" content="#05090f" />
+<meta name="author" content="Æ-G / Blackfeather.run" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="ÆG-AQUILA — Hydration Intelligence Agent" />
+<meta property="og:description" content="Guard your water. Master your flow. Two rituals, sixteen protocols — hydration first, coffee water second." />
+<meta property="og:site_name" content="ÆG-AQUILA" />
+<meta property="og:image" content="og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="ÆG-AQUILA · Hydration Intelligence · Guard your water. Master your flow." />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="ÆG-AQUILA — Hydration Intelligence Agent" />
+<meta name="twitter:description" content="Guard your water. Master your flow. Hydration-first water intelligence from Blackfeather.run." />
+<meta name="twitter:image" content="og-image.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #05090f;
+    --bg-2: #0a1220;
+    --ink: #eef3f7;
+    --ink-dim: #9aa9b8;
+    --ink-mute: #5f6d7e;
+    --line: rgba(230, 240, 250, 0.09);
+    --line-strong: rgba(230, 240, 250, 0.18);
+    --accent: #5ee0ff;
+    --accent-2: #7db9ff;
+    --accent-deep: #183b5a;
+    --warn: #ffb648;
+    --danger: #ff6b6b;
+    --surface: rgba(16, 24, 38, 0.55);
+    --surface-solid: #0d1624;
+    --serif: 'Fraunces', 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+    --gutter: clamp(20px, 4vw, 56px);
+    --maxw: 1360px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--accent); color: #051117; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ───────────────────── NAV ───────────────────── */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 18px var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(14px) saturate(130%);
+    -webkit-backdrop-filter: blur(14px) saturate(130%);
+    background: linear-gradient(180deg, rgba(5,9,15,0.7), rgba(5,9,15,0.25));
+    border-bottom: 1px solid var(--line);
+  }
+  .nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: 0.02em;
+  }
+  .nav__mark {
+    width: 30px; height: 30px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: var(--serif);
+    font-size: 14px;
+    background: radial-gradient(circle at 30% 30%, rgba(94,224,255,0.35), transparent 60%), var(--bg-2);
+    box-shadow: inset 0 0 12px rgba(94,224,255,0.12);
+  }
+  .nav__links {
+    display: flex;
+    gap: 28px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+  .nav__links a { transition: color .25s ease; }
+  .nav__links a:hover { color: var(--accent); }
+  .nav__cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    transition: all .25s ease;
+  }
+  .nav__cta:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(94,224,255,0.08);
+  }
+  @media (max-width: 820px) {
+    .nav__links { display: none; }
+  }
+
+  /* ───────────────────── HERO ───────────────────── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    filter: saturate(0.7) brightness(0.55) contrast(1.05);
+  }
+  .hero__still {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(ellipse at 25% 30%, rgba(94,224,255,0.22), transparent 55%),
+      radial-gradient(ellipse at 75% 70%, rgba(125,185,255,0.18), transparent 55%),
+      linear-gradient(135deg, #0a1a2a 0%, #050d18 60%, #020509 100%);
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__video { display: none; }
+    .hero__still { display: block; }
+  }
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(94,224,255,0.12), transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(125,185,255,0.14), transparent 55%),
+      linear-gradient(180deg, rgba(5,9,15,0.55) 0%, rgba(5,9,15,0.75) 55%, rgba(5,9,15,0.95) 100%);
+  }
+  .hero__grid-lines {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(to right, var(--line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: 0.35;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  }
+
+  .hero__content {
+    padding: 140px var(--gutter) 60px;
+    max-width: var(--maxw);
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .hero__eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero__eyebrow::before {
+    content: '';
+    width: 36px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero__title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(56px, 10vw, 168px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    margin: 0 0 24px;
+    color: var(--ink);
+  }
+  .hero__title .ligature {
+    font-weight: 400;
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero__title .thin {
+    font-weight: 200;
+    color: var(--ink-dim);
+  }
+
+  .hero__tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(22px, 2.6vw, 34px);
+    color: var(--ink-dim);
+    margin: 0 0 48px;
+    max-width: 720px;
+  }
+
+  .hero__meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 40px;
+    padding-top: 40px;
+    border-top: 1px solid var(--line);
+    max-width: 900px;
+  }
+  .hero__meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .hero__meta-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .hero__meta-value {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .hero__scroll {
+    padding: 24px var(--gutter);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    border-top: 1px solid var(--line);
+    background: rgba(5,9,15,0.6);
+    backdrop-filter: blur(8px);
+  }
+  .hero__scroll-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--accent), transparent);
+    margin: 0 24px;
+    max-width: 300px;
+  }
+
+  /* ───────────────────── SECTION ───────────────────── */
+  section { position: relative; }
+
+  .section {
+    padding: 120px var(--gutter);
+    max-width: var(--maxw);
+    margin: 0 auto;
+  }
+  .section__head {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+    margin-bottom: 72px;
+    align-items: end;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 860px) {
+    .section__head { grid-template-columns: 1fr; gap: 24px; }
+  }
+  .section__num {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .section__label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-top: 8px;
+  }
+  .section__title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(36px, 5.5vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin: 0;
+  }
+  .section__title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+  .section__lead {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-dim);
+    max-width: 60ch;
+  }
+
+  /* ───────────────────── MANIFESTO ───────────────────── */
+  .manifesto {
+    background:
+      radial-gradient(ellipse at 10% 0%, rgba(24,59,90,0.4), transparent 60%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .manifesto__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  @media (max-width: 960px) {
+    .manifesto__grid { grid-template-columns: 1fr; gap: 48px; }
+  }
+  .manifesto__statement {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(26px, 3.2vw, 42px);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .manifesto__statement .mark {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .stack {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .stack__cell {
+    padding: 28px;
+    background: var(--bg-2);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stack__label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .stack__value {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .stack__value em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* ───────────────────── MODES ───────────────────── */
+  .modes__tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tab {
+    flex: 1;
+    padding: 20px 0;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--ink-mute);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .3s ease;
+    text-align: left;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .tab:hover { color: var(--ink-dim); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab__num {
+    font-size: 10px;
+    opacity: 0.6;
+  }
+  .tab__label {
+    font-family: var(--serif);
+    font-size: 20px;
+    letter-spacing: -0.01em;
+    text-transform: none;
+  }
+
+  .modes__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .mode-card {
+    background: var(--bg);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: background .3s ease;
+    position: relative;
+    min-height: 260px;
+  }
+  .mode-card:hover {
+    background: var(--bg-2);
+  }
+  .mode-card:hover .mode-card__arrow { transform: translateX(4px); opacity: 1; }
+  .mode-card__num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--ink-mute);
+  }
+  .mode-card__title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 24px;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    color: var(--ink);
+    margin: 0;
+  }
+  .mode-card__purpose {
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .mode-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .mode-card__arrow {
+    color: var(--accent);
+    opacity: 0.4;
+    transition: all .3s ease;
+  }
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    color: var(--ink-dim);
+  }
+  .tag--accent {
+    color: var(--accent);
+    border-color: rgba(94,224,255,0.3);
+    background: rgba(94,224,255,0.04);
+  }
+  .tag--warn {
+    color: var(--warn);
+    border-color: rgba(255,182,72,0.3);
+  }
+
+  /* ───────────────────── PROFILES ───────────────────── */
+  .profiles {
+    background: var(--bg-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .profiles__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+  }
+  .profile {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    transition: transform .4s cubic-bezier(.2,.8,.2,1), border-color .3s;
+  }
+  .profile:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-3px);
+  }
+  .profile__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .profile__id {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--ink-mute);
+  }
+  .profile__name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    margin: 4px 0 0;
+    line-height: 1.05;
+  }
+  .profile__purpose {
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .profile__bias {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    padding: 6px 10px;
+    background: rgba(94,224,255,0.06);
+    border: 1px solid rgba(94,224,255,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    align-self: flex-start;
+  }
+  .profile__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .stat {
+    background: var(--bg);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat__label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .stat__value {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .stat__unit {
+    font-size: 10px;
+    color: var(--ink-mute);
+    font-weight: 400;
+  }
+  .profile__best {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .profile__best-label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 6px;
+  }
+  .profile__warning {
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--warn);
+    padding: 12px 14px;
+    background: rgba(255,182,72,0.06);
+    border: 1px solid rgba(255,182,72,0.2);
+    border-left: 2px solid var(--warn);
+  }
+
+  /* ───────────────────── AQUAFORGE ───────────────────── */
+  .aquaforge {
+    background:
+      radial-gradient(ellipse at 80% 10%, rgba(94,224,255,0.08), transparent 55%),
+      radial-gradient(ellipse at 0% 90%, rgba(24,59,90,0.5), transparent 60%),
+      var(--bg);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .aquaforge::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, var(--line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.4;
+    mask-image: radial-gradient(ellipse at 50% 40%, black 30%, transparent 75%);
+    pointer-events: none;
+  }
+  .forge {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 48px;
+    border: 1px solid var(--line-strong);
+    background: linear-gradient(180deg, rgba(13,22,36,0.9), rgba(5,9,15,0.95));
+    padding: 48px;
+  }
+  @media (max-width: 960px) {
+    .forge { grid-template-columns: 1fr; gap: 32px; padding: 28px; }
+  }
+  .forge__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .forge__label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 14px;
+    display: block;
+  }
+  .forge__profiles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .forge__profile-btn {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    padding: 14px 16px;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--serif);
+    font-size: 16px;
+    letter-spacing: -0.01em;
+    transition: all .25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .forge__profile-btn:hover {
+    border-color: var(--line-strong);
+    color: var(--ink);
+  }
+  .forge__profile-btn.active {
+    background: rgba(94,224,255,0.08);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .forge__profile-btn-sub {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .forge__profile-btn.active .forge__profile-btn-sub { color: var(--accent-2); }
+
+  .forge__batch {
+    display: flex;
+    gap: 6px;
+  }
+  .forge__batch-btn {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    padding: 12px 8px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    transition: all .25s ease;
+  }
+  .forge__batch-btn:hover { border-color: var(--line-strong); color: var(--ink); }
+  .forge__batch-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+
+  .forge__method {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .forge__method-btn {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    padding: 10px 12px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: all .25s ease;
+  }
+  .forge__method-btn:hover { border-color: var(--line-strong); color: var(--ink); }
+  .forge__method-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(94,224,255,0.05);
+  }
+
+  .forge__output {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background:
+      radial-gradient(ellipse at 100% 0%, rgba(94,224,255,0.06), transparent 60%),
+      var(--bg);
+    border: 1px solid var(--line-strong);
+    padding: 32px;
+    position: relative;
+  }
+  .forge__status {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .forge__profile-name {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin: 0;
+    color: var(--ink);
+  }
+  .forge__profile-name em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .forge__targets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .forge__target {
+    padding: 16px;
+    background: var(--bg-2);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .forge__target-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .forge__target-value {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 26px;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+  }
+  .forge__target-unit {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mute);
+    letter-spacing: 0.1em;
+  }
+
+  .forge__recipe-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+  .forge__recipe-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .forge__recipe-batch {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+  }
+  .forge__recipe {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--line);
+  }
+  .forge__recipe li {
+    background: var(--bg);
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 16px;
+    align-items: center;
+  }
+  .forge__recipe-formula {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--accent);
+  }
+  .forge__recipe-name {
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+  .forge__recipe-grams {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    transition: color .4s ease;
+  }
+  .forge__recipe-grams-unit {
+    font-size: 11px;
+    color: var(--ink-mute);
+    margin-left: 2px;
+  }
+
+  .forge__disclaimer {
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1.6;
+    letter-spacing: 0.06em;
+    color: var(--ink-mute);
+    padding: 14px 16px;
+    border: 1px dashed var(--line-strong);
+    border-left: 2px solid var(--warn);
+  }
+  .forge__disclaimer strong {
+    color: var(--warn);
+    font-weight: 500;
+  }
+
+  /* ───────────────────── REGIONS ───────────────────── */
+  .regions__table {
+    display: grid;
+    grid-template-columns: 1fr;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .region {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr 1fr;
+    gap: 32px;
+    padding: 28px 32px;
+    border-bottom: 1px solid var(--line);
+    transition: background .3s ease;
+    align-items: start;
+  }
+  .region:last-child { border-bottom: none; }
+  .region:hover { background: var(--bg-2); }
+  @media (max-width: 960px) {
+    .region {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 24px;
+    }
+  }
+  .region__name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .region__name-sub {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-top: 4px;
+  }
+  .region__col {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+  }
+  .region__col-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ───────────────────── FRAMEWORK ───────────────────── */
+  .framework {
+    background:
+      radial-gradient(ellipse at 80% 20%, rgba(24,59,90,0.35), transparent 50%),
+      var(--bg);
+  }
+  .framework__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+  @media (max-width: 960px) {
+    .framework__grid { grid-template-columns: 1fr; gap: 32px; }
+  }
+  .rule {
+    border-left: 2px solid var(--accent);
+    padding: 20px 0 20px 28px;
+    margin-bottom: 4px;
+  }
+  .rule__cond {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .rule__text {
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ───────────────────── MINERALS ───────────────────── */
+  .minerals__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .mineral {
+    background: var(--bg);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .mineral__formula {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--accent);
+  }
+  .mineral__name {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .mineral__adds {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    margin-top: auto;
+  }
+
+  /* ───────────────────── SAFETY ───────────────────── */
+  .safety {
+    background: var(--bg-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .safety__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 48px;
+  }
+  @media (max-width: 960px) {
+    .safety__grid { grid-template-columns: 1fr; }
+  }
+  .safety__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid var(--line);
+  }
+  .safety__list li {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .safety__list li:last-child { border-bottom: none; }
+  .safety__list li::before {
+    content: counter(rule, decimal-leading-zero);
+    counter-increment: rule;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+  .safety__list { counter-reset: rule; }
+
+  .safety__side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .redflag {
+    background: var(--bg);
+    border: 1px solid rgba(255,107,107,0.25);
+    border-left: 3px solid var(--danger);
+    padding: 28px;
+  }
+  .ippanel {
+    background: var(--bg);
+    border: 1px solid var(--line-strong);
+    border-left: 3px solid var(--accent);
+    padding: 28px;
+  }
+  .ippanel__title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 18px;
+  }
+  .ippanel__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 18px;
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+  .ippanel__list li {
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--line);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+  .ippanel__list li:last-child { border-bottom: none; }
+  .ippanel__refusal {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .redflag__title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--danger);
+    margin: 0 0 18px;
+  }
+  .redflag__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 18px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .redflag__list li {
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .redflag__list li:last-child { border-bottom: none; }
+  .redflag__action {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--danger);
+    line-height: 1.55;
+    margin: 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,107,107,0.2);
+  }
+
+  /* ───────────────────── ROADMAP ───────────────────── */
+  .roadmap__timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  @media (max-width: 960px) {
+    .roadmap__timeline { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .roadmap__timeline { grid-template-columns: 1fr; }
+  }
+  .phase {
+    background: var(--bg);
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 400px;
+  }
+  .phase__num {
+    font-family: var(--serif);
+    font-size: 64px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+  }
+  .phase__name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .phase__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+  }
+  .phase__list li {
+    padding: 10px 0;
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    padding-left: 18px;
+  }
+  .phase__list li:last-child { border-bottom: none; }
+  .phase__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 17px;
+    width: 6px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  /* ───────────────────── ARCHITECTURE ───────────────────── */
+  .arch__stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .layer {
+    display: grid;
+    grid-template-columns: 80px 1fr 2fr;
+    gap: 32px;
+    padding: 24px 28px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    align-items: center;
+    transition: all .3s ease;
+  }
+  .layer:hover {
+    border-color: var(--line-strong);
+    background: var(--bg-2);
+  }
+  @media (max-width: 820px) {
+    .layer { grid-template-columns: 1fr; gap: 12px; padding: 20px; }
+  }
+  .layer__num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+  }
+  .layer__name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+  }
+  .layer__resp {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+  }
+
+  /* ───────────────────── FOOTER ───────────────────── */
+  .footer {
+    padding: 80px var(--gutter) 40px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+  }
+  .footer__grid {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  @media (max-width: 820px) {
+    .footer__grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .footer__mark {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 48px;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+  }
+  .footer__mark em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .footer__tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-dim);
+    max-width: 440px;
+    line-height: 1.4;
+  }
+  .footer__col-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 16px;
+  }
+  .footer__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .footer__list li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--ink-dim);
+  }
+  .footer__bottom {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-mute);
+  }
+  @media (max-width: 600px) {
+    .footer__bottom { flex-direction: column; gap: 12px; }
+  }
+
+  /* ───────────────────── ANIMATIONS ───────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  .status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 8px;
+    animation: pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  /* hide when tab not active */
+  .mode-group { display: none; }
+  .mode-group.active { display: grid; }
+</style>
+</head>
+<body>
+
+<!-- ───────────────────── NAV ───────────────────── -->
+<nav class="nav">
+  <a href="#top" class="nav__brand">
+    <span class="nav__mark">Æ</span>
+    <span>ÆG-AQUILA</span>
+  </a>
+  <div class="nav__links">
+    <a href="#modes">Modes</a>
+    <a href="#profiles">Profiles</a>
+    <a href="#aquaforge">AquaForge</a>
+    <a href="#regions">Atlas</a>
+    <a href="#roadmap">Roadmap</a>
+  </div>
+  <a href="#engage" class="nav__cta">Engage</a>
+</nav>
+
+<!-- ───────────────────── HERO ───────────────────── -->
+<header id="top" class="hero">
+  <video class="hero__video" autoplay muted loop playsinline preload="metadata" poster="" id="heroVideo">
+    <source src="waterbackground30.mp4" type="video/mp4" media="(max-width: 820px)" />
+    <source src="water_background.mp4" type="video/mp4" />
+  </video>
+  <div class="hero__still" aria-hidden="true"></div>
+  <div class="hero__overlay"></div>
+  <div class="hero__grid-lines"></div>
+
+  <div class="hero__content">
+    <div class="hero__eyebrow">
+      <span class="status-dot"></span>
+      Æ-G / Blackfeather.run — Hydration Intelligence v1.0
+    </div>
+    <h1 class="hero__title">
+      <span class="ligature">ÆG</span><span class="thin">—</span>AQUILA
+    </h1>
+    <p class="hero__tagline">Guard your water. Master your flow.</p>
+
+    <div class="hero__meta">
+      <div class="hero__meta-item">
+        <span class="hero__meta-label">Primary</span>
+        <span class="hero__meta-value">Hydration Intelligence</span>
+      </div>
+      <div class="hero__meta-item">
+        <span class="hero__meta-label">Secondary</span>
+        <span class="hero__meta-value">Coffee Water Craft</span>
+      </div>
+      <div class="hero__meta-item">
+        <span class="hero__meta-label">Platform</span>
+        <span class="hero__meta-value">Aether Water OS</span>
+      </div>
+      <div class="hero__meta-item">
+        <span class="hero__meta-label">Engine</span>
+        <span class="hero__meta-value">AquaForge</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__scroll">
+    <span>Scroll — Enter the flow</span>
+    <span class="hero__scroll-line"></span>
+    <span>01 / Manifesto</span>
+  </div>
+</header>
+
+<!-- ───────────────────── MANIFESTO ───────────────────── -->
+<section class="manifesto">
+  <div class="section">
+    <div class="section__head">
+      <div>
+        <div class="section__num">01 — Manifesto</div>
+        <div class="section__label">Identity / Purpose</div>
+      </div>
+      <h2 class="section__title">A <em>water intelligence</em> for discipline and flavour.</h2>
+    </div>
+
+    <div class="manifesto__grid">
+      <p class="manifesto__statement reveal">
+        ÆG-AQUILA helps users control water for two rituals — <span class="mark">hydration</span> for discipline, performance, and recovery first; <span class="mark">coffee water</span> and flavour optimisation second.
+      </p>
+      <div class="stack reveal">
+        <div class="stack__cell">
+          <span class="stack__label">Agent</span>
+          <span class="stack__value"><em>ÆG</em>-AQUILA</span>
+        </div>
+        <div class="stack__cell">
+          <span class="stack__label">First Sachet</span>
+          <span class="stack__value"><em>ÆG</em>-FLOW</span>
+        </div>
+        <div class="stack__cell">
+          <span class="stack__label">AetherIQ Agent</span>
+          <span class="stack__value"><em>ÆG</em>-AETHERIS</span>
+        </div>
+        <div class="stack__cell">
+          <span class="stack__label">Platform</span>
+          <span class="stack__value">Aether <em>Water</em> OS</span>
+        </div>
+        <div class="stack__cell">
+          <span class="stack__label">Recipe Engine</span>
+          <span class="stack__value">Aqua<em>Forge</em></span>
+        </div>
+        <div class="stack__cell">
+          <span class="stack__label">Profile Library</span>
+          <span class="stack__value">Water <em>Atlas</em></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── MODES ───────────────────── -->
+<section id="modes">
+  <div class="section">
+    <div class="section__head">
+      <div>
+        <div class="section__num">02 — Modes</div>
+        <div class="section__label">16 Operating Contexts</div>
+      </div>
+      <div>
+        <h2 class="section__title">Two <em>rituals</em>, sixteen protocols.</h2>
+        <p class="section__lead" style="margin-top:24px;">Hydration-first by mandate. Coffee water by craft. Every mode returns structured guidance in plain language, backed by deterministic calculation and safety rules.</p>
+      </div>
+    </div>
+
+    <div class="modes__tabs">
+      <button class="tab active" data-tab="hydration">
+        <span class="tab__num">PRIMARY / 08</span>
+        <span class="tab__label">Hydration First</span>
+      </button>
+      <button class="tab" data-tab="coffee">
+        <span class="tab__num">SECONDARY / 08</span>
+        <span class="tab__label">Coffee & Brew Water</span>
+      </button>
+    </div>
+
+    <!-- HYDRATION -->
+    <div class="modes__grid mode-group active" data-group="hydration">
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 01</div>
+        <h3 class="mode-card__title">Daily Hydration Support</h3>
+        <p class="mode-card__purpose">Build practical daily water intake routines tuned to body weight, training, weather, and sweat level.</p>
+        <div class="mode-card__meta"><span>Routine · Timing · Electrolytes</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 02</div>
+        <h3 class="mode-card__title">Blackfeather.run Hydration</h3>
+        <p class="mode-card__purpose">Challenge-specific pre/during/post planning for the Blackfeather protocol and its disciplines.</p>
+        <div class="mode-card__meta"><span class="tag tag--accent">Signature</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 03</div>
+        <h3 class="mode-card__title">Endurance / Sweat-Loss</h3>
+        <p class="mode-card__purpose">Duration-based fluid and electrolyte guidance with overhydration safety thresholds.</p>
+        <div class="mode-card__meta"><span>Fluid · Sodium · Safety</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 04</div>
+        <h3 class="mode-card__title">Electrolyte Education</h3>
+        <p class="mode-card__purpose">Sodium, potassium, magnesium, calcium explained clearly. General education only, no medical dosing.</p>
+        <div class="mode-card__meta"><span>Na · K · Mg · Ca</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 05</div>
+        <h3 class="mode-card__title">Bottled Water Assessment</h3>
+        <p class="mode-card__purpose">Interpret mineral labels for drinking. Multi-dimensional ratings: daily, training, heat, recovery, mixing.</p>
+        <div class="mode-card__meta"><span>Label decoder</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 06</div>
+        <h3 class="mode-card__title">Tap / Filtered / RO</h3>
+        <p class="mode-card__purpose">Quality awareness, filter recommendations, and testing guidance for every source.</p>
+        <div class="mode-card__meta"><span>Source audit</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 07</div>
+        <h3 class="mode-card__title">Heat and Recovery</h3>
+        <p class="mode-card__purpose">Hot-weather and post-sweat frameworks. Red-flag symptom recognition built in.</p>
+        <div class="mode-card__meta"><span class="tag tag--warn">Red-flag aware</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 08</div>
+        <h3 class="mode-card__title">Routine Builder</h3>
+        <p class="mode-card__purpose">Design repeatable morning, training, recovery, and evening hydration habits.</p>
+        <div class="mode-card__meta"><span>Discipline loops</span><span class="mode-card__arrow">→</span></div>
+      </article>
+    </div>
+
+    <!-- COFFEE -->
+    <div class="modes__grid mode-group" data-group="coffee">
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 09</div>
+        <h3 class="mode-card__title">Brew Water Diagnosis</h3>
+        <p class="mode-card__purpose">Diagnose coffee water issues by profile. Flavour, brewing, and equipment risk in one read.</p>
+        <div class="mode-card__meta"><span>Diagnostic</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 10</div>
+        <h3 class="mode-card__title">Bottled Water for Coffee</h3>
+        <p class="mode-card__purpose">Assess bottled water suitability for brewing, with espresso warnings where relevant.</p>
+        <div class="mode-card__meta"><span>Brew rating</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 11</div>
+        <h3 class="mode-card__title">Water Blending</h3>
+        <p class="mode-card__purpose">Blend two waters to reach a target mineral profile. Batch-ready recipes.</p>
+        <div class="mode-card__meta"><span>Ratio math</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 12</div>
+        <h3 class="mode-card__title">RO / Distilled Build</h3>
+        <p class="mode-card__purpose">Rebuild full mineral profile from a blank slate. Food-grade minerals only, always.</p>
+        <div class="mode-card__meta"><span class="tag tag--accent">AquaForge</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 13</div>
+        <h3 class="mode-card__title">Regional Replication</h3>
+        <p class="mode-card__purpose">Replicate city water profiles. Melbourne in Tokyo. Oslo in Tucson.</p>
+        <div class="mode-card__meta"><span>Atlas-powered</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 14</div>
+        <h3 class="mode-card__title">Espresso-Safe Profile</h3>
+        <p class="mode-card__purpose">Machine-safe water targets. Scale and corrosion warnings issued with every output.</p>
+        <div class="mode-card__meta"><span class="tag tag--warn">Safety-gated</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 15</div>
+        <h3 class="mode-card__title">Cold Brew Water</h3>
+        <p class="mode-card__purpose">Optimise water for cold brew and concentrate. Extraction and dilution guidance.</p>
+        <div class="mode-card__meta"><span>Concentrate-ready</span><span class="mode-card__arrow">→</span></div>
+      </article>
+      <article class="mode-card">
+        <div class="mode-card__num">Mode 16</div>
+        <h3 class="mode-card__title">Café / Roaster Audit</h3>
+        <p class="mode-card__purpose">Professional water program for venues. Filter plan, batch plan, staff notes.</p>
+        <div class="mode-card__meta"><span class="tag tag--accent">Commercial</span><span class="mode-card__arrow">→</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── HOUSE PROFILES ───────────────────── -->
+<section id="profiles" class="profiles">
+  <div class="section">
+    <div class="section__head">
+      <div>
+        <div class="section__num">03 — House Profiles</div>
+        <div class="section__label">Proprietary Water Targets</div>
+      </div>
+      <div>
+        <h2 class="section__title">The <em>Water Atlas</em> — signature profiles.</h2>
+        <p class="section__lead" style="margin-top:24px;">Six calibrated targets for every brew method and coffee character, from floral clarity to espresso-safe operation.</p>
+      </div>
+    </div>
+
+    <div class="profiles__grid">
+
+      <article class="profile">
+        <header class="profile__head">
+          <div>
+            <div class="profile__id">AEG-CLARITY</div>
+            <h3 class="profile__name">ÆG Clarity</h3>
+          </div>
+          <span class="profile__bias">Mg-forward</span>
+        </header>
+        <p class="profile__purpose">Floral, citrus, light-roast clarity. Built for cupping-grade transparency.</p>
+        <div class="profile__stats">
+          <div class="stat"><span class="stat__label">TDS</span><span class="stat__value">70–100 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Hardness</span><span class="stat__value">50–75 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Alkalinity</span><span class="stat__value">25–40 <span class="stat__unit">ppm</span></span></div>
+        </div>
+        <p class="profile__best"><span class="profile__best-label">Best for</span>V60, Chemex, AeroPress, washed Ethiopia, Kenya, cupping</p>
+      </article>
+
+      <article class="profile">
+        <header class="profile__head">
+          <div>
+            <div class="profile__id">AEG-STRUCTURE</div>
+            <h3 class="profile__name">ÆG Structure</h3>
+          </div>
+          <span class="profile__bias">Balanced Ca/Mg</span>
+        </header>
+        <p class="profile__purpose">Balanced everyday brewing. The workhorse profile.</p>
+        <div class="profile__stats">
+          <div class="stat"><span class="stat__label">TDS</span><span class="stat__value">100–140 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Hardness</span><span class="stat__value">70–100 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Alkalinity</span><span class="stat__value">40–60 <span class="stat__unit">ppm</span></span></div>
+        </div>
+        <p class="profile__best"><span class="profile__best-label">Best for</span>Batch brew, French press, medium roast</p>
+      </article>
+
+      <article class="profile">
+        <header class="profile__head">
+          <div>
+            <div class="profile__id">AEG-VELVET</div>
+            <h3 class="profile__name">ÆG Velvet</h3>
+          </div>
+          <span class="profile__bias">Ca-supported</span>
+        </header>
+        <p class="profile__purpose">Sweetness, body, chocolate. Engineered for milk coffee.</p>
+        <div class="profile__stats">
+          <div class="stat"><span class="stat__label">TDS</span><span class="stat__value">120–160 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Hardness</span><span class="stat__value">80–120 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Alkalinity</span><span class="stat__value">50–75 <span class="stat__unit">ppm</span></span></div>
+        </div>
+        <p class="profile__best"><span class="profile__best-label">Best for</span>Brazil, Colombia, milk coffee, chocolate profiles</p>
+      </article>
+
+      <article class="profile">
+        <header class="profile__head">
+          <div>
+            <div class="profile__id">AEG-NEON-FRUIT</div>
+            <h3 class="profile__name">ÆG Neon Fruit</h3>
+          </div>
+          <span class="profile__bias">Mg / low buffer</span>
+        </header>
+        <p class="profile__purpose">Expressive naturals and anaerobics. Maximum fruit amplification.</p>
+        <div class="profile__stats">
+          <div class="stat"><span class="stat__label">TDS</span><span class="stat__value">80–120 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Hardness</span><span class="stat__value">60–90 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Alkalinity</span><span class="stat__value">20–40 <span class="stat__unit">ppm</span></span></div>
+        </div>
+        <p class="profile__best"><span class="profile__best-label">Best for</span>Natural Ethiopia, anaerobic Colombia, fruity coffees</p>
+      </article>
+
+      <article class="profile">
+        <header class="profile__head">
+          <div>
+            <div class="profile__id">AEG-COLD-FORGE</div>
+            <h3 class="profile__name">ÆG Cold Forge</h3>
+          </div>
+          <span class="profile__bias">Balanced</span>
+        </header>
+        <p class="profile__purpose">Cold brew and concentrate. RTD-ready backbone.</p>
+        <div class="profile__stats">
+          <div class="stat"><span class="stat__label">TDS</span><span class="stat__value">100–150 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Hardness</span><span class="stat__value">70–110 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Alkalinity</span><span class="stat__value">45–70 <span class="stat__unit">ppm</span></span></div>
+        </div>
+        <p class="profile__best"><span class="profile__best-label">Best for</span>Cold brew, concentrate, RTD base</p>
+      </article>
+
+      <article class="profile">
+        <header class="profile__head">
+          <div>
+            <div class="profile__id">AEG-ESPRESSO-SHIELD</div>
+            <h3 class="profile__name">ÆG Espresso Shield</h3>
+          </div>
+          <span class="profile__bias">Controlled Ca/Cl</span>
+        </header>
+        <p class="profile__purpose">Scale-aware, machine-safe espresso profile for commercial deployment.</p>
+        <div class="profile__stats">
+          <div class="stat"><span class="stat__label">TDS</span><span class="stat__value">70–120 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Hardness</span><span class="stat__value">40–70 <span class="stat__unit">ppm</span></span></div>
+          <div class="stat"><span class="stat__label">Alkalinity</span><span class="stat__value">35–55 <span class="stat__unit">ppm</span></span></div>
+        </div>
+        <p class="profile__best"><span class="profile__best-label">Best for</span>Espresso machines</p>
+        <div class="profile__warning">⚠ Validate against your specific machine and boiler type before commercial deployment. Espresso boilers are unforgiving of incorrect mineral profiles.</div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── AQUAFORGE ───────────────────── -->
+<section id="aquaforge" class="aquaforge">
+  <div class="section">
+    <div class="section__head">
+      <div>
+        <div class="section__num">04 — AquaForge</div>
+        <div class="section__label">Recipe Engine · Live Demo</div>
+      </div>
+      <div>
+        <h2 class="section__title">Forge the <em>profile</em>, batch it down.</h2>
+        <p class="section__lead" style="margin-top:24px;">Select a house profile. Pick a batch size. AquaForge returns a food-grade mineral recipe to build that water from RO or distilled. Calculations are educational — verify against your own test kit.</p>
+      </div>
+    </div>
+
+    <div class="forge">
+      <div class="forge__controls">
+        <div>
+          <span class="forge__label">Target Profile</span>
+          <div class="forge__profiles" id="forgeProfiles">
+            <button class="forge__profile-btn active" data-profile="clarity">
+              ÆG Clarity
+              <span class="forge__profile-btn-sub">Mg-forward · 85 TDS</span>
+            </button>
+            <button class="forge__profile-btn" data-profile="structure">
+              ÆG Structure
+              <span class="forge__profile-btn-sub">Balanced · 120 TDS</span>
+            </button>
+            <button class="forge__profile-btn" data-profile="velvet">
+              ÆG Velvet
+              <span class="forge__profile-btn-sub">Ca-supported · 140 TDS</span>
+            </button>
+            <button class="forge__profile-btn" data-profile="neon">
+              ÆG Neon Fruit
+              <span class="forge__profile-btn-sub">Mg · low buffer · 100 TDS</span>
+            </button>
+            <button class="forge__profile-btn" data-profile="cold">
+              ÆG Cold Forge
+              <span class="forge__profile-btn-sub">Balanced · 125 TDS</span>
+            </button>
+            <button class="forge__profile-btn" data-profile="shield">
+              ÆG Espresso Shield
+              <span class="forge__profile-btn-sub">Controlled Ca/Cl · 95 TDS</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <span class="forge__label">Batch Size</span>
+          <div class="forge__batch" id="forgeBatch">
+            <button class="forge__batch-btn" data-batch="0.5">0.5 L</button>
+            <button class="forge__batch-btn active" data-batch="1">1 L</button>
+            <button class="forge__batch-btn" data-batch="2">2 L</button>
+            <button class="forge__batch-btn" data-batch="5">5 L</button>
+            <button class="forge__batch-btn" data-batch="10">10 L</button>
+          </div>
+        </div>
+
+        <div>
+          <span class="forge__label">Base Water</span>
+          <div class="forge__method" id="forgeMethod">
+            <button class="forge__method-btn active" data-method="ro">RO / Distilled</button>
+            <button class="forge__method-btn" data-method="soft">Soft municipal</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="forge__output">
+        <div class="forge__status"><span class="status-dot"></span>FORGE · LIVE</div>
+        <h3 class="forge__profile-name" id="forgeName"><em>ÆG</em> Clarity</h3>
+
+        <div class="forge__targets">
+          <div class="forge__target">
+            <span class="forge__target-label">TDS Target</span>
+            <span class="forge__target-value"><span id="forgeTDS">85</span><span class="forge__target-unit"> ppm</span></span>
+          </div>
+          <div class="forge__target">
+            <span class="forge__target-label">Hardness</span>
+            <span class="forge__target-value"><span id="forgeHard">62</span><span class="forge__target-unit"> CaCO₃</span></span>
+          </div>
+          <div class="forge__target">
+            <span class="forge__target-label">Alkalinity</span>
+            <span class="forge__target-value"><span id="forgeAlk">32</span><span class="forge__target-unit"> CaCO₃</span></span>
+          </div>
+        </div>
+
+        <div class="forge__recipe-head">
+          <span class="forge__recipe-title">— Mineral Recipe</span>
+          <span class="forge__recipe-batch" id="forgeBatchLabel">BATCH · 1.00 L</span>
+        </div>
+
+        <ul class="forge__recipe" id="forgeRecipe">
+          <!-- populated by JS -->
+        </ul>
+
+        <div class="forge__disclaimer">
+          <strong>⚠ Educational estimate.</strong> Food-grade minerals only. Verify with a TDS meter and titration. AquaForge is a starting point, not a commercial substitute for calibrated brewing water. Espresso machines require validation per boiler type.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── REGIONS ───────────────────── -->
+<section id="regions">
+  <div class="section">
+    <div class="section__head">
+      <div>
+        <div class="section__num">05 — Regional Atlas</div>
+        <div class="section__label">9 Cities · Working Targets</div>
+      </div>
+      <div>
+        <h2 class="section__title">Water <em>geography</em> matters.</h2>
+        <p class="section__lead" style="margin-top:24px;">Municipal water varies by supply zone, season, treatment plant, and pipework. These are working targets to start from, not final answers.</p>
+      </div>
+    </div>
+
+    <div class="regions__table">
+
+      <div class="region">
+        <div class="region__name">Sydney<span class="region__name-sub">AU</span></div>
+        <div class="region__col"><span class="region__col-label">Character</span>Moderate to soft urban water</div>
+        <div class="region__col"><span class="region__col-label">Coffee Impact</span>Clean but can lack structure for espresso</div>
+        <div class="region__col"><span class="region__col-label">Recommendation</span>Build slightly more hardness for espresso body</div>
+      </div>
+
+      <div class="region">
+        <div class="region__name">Melbourne<span class="region__name-sub">AU</span></div>
+        <div class="region__col"><span class="region__col-label">Character</span>Slightly harder than Sydney</div>
+        <div class="region__col"><span class="region__col-label">Coffee Impact</span>Good general filter water</div>
+        <div class="region__col"><span class="region__col-label">Recommendation</span>Minor adjustment for espresso</div>
+      </div>
+
+      <div class="region">
+        <div class="region__name">Tokyo<span class="region__name-sub">JP</span></div>
+        <div class="region__col"><span class="region__col-label">Character</span>Very soft</div>
+        <div class="region__col"><span class="region__col-label">Coffee Impact</span>Excellent clarity for filter; needs adjustment for espresso</div>
+        <div class="region__col"><span class="region__col-label">Recommendation</span>Ideal for floral filter as-is; boost hardness for espresso</div>
+      </div>
+
+      <div class="region">
+        <div class="region__name">London<span class="region__name-sub">UK</span></div>
+        <div class="region__col"><span class="region__col-label">Character</span>Generally harder</div>
+        <div class="region__col"><span class="region__col-label">Coffee Impact</span>May mute delicate notes; scale risk for espresso</div>
+        <div class="region__col"><span class="region__col-label">Recommendation</span>RO blend or softening for specialty brewing</div>
+      </div>
+
+      <div class="region">
+        <div class="region__name">Oslo / Copenhagen<span class="region__name-sub">NO / DK</span></div>
+        <div class="region__col"><span class="region__col-label">Character</span>Soft</div>
+        <div class="region__col"><span class="region__col-label">Coffee Impact</span>Good for light roast</div>
+        <div class="region__col"><span class="region__col-label">Recommendation</span>Minimal adjustment; slight hardness for espresso</div>
+      </div>
+
+      <div class="region">
+        <div class="region__name">Brisbane<span class="region__name-sub">AU</span></div>
+        <div class="region__col"><span class="region__col-label">Character</span>Moderate mineral load</div>
+        <div class="region__col"><span class="region__col-label">Coffee Impact</span>Suits milk espresso; may mute delicate pour-over</div>
+        <div class="region__col"><span class="region__col-label">Recommendation</span>Adjust for clarity in pour-over applications</div>
+      </div>
+
+      <div class="region">
+        <div class="region__name">Adelaide<span class="region__name-sub">AU</span></div>
+        <div class="region__col"><span class="region__col-label">Character</span>Historically harder and mineral-heavy</div>
+        <div class="region__col"><span class="region__col-label">Coffee Impact</span>Can taste flat or heavy without treatment</div>
+        <div class="region__col"><span class="region__col-label">Recommendation</span>RO blend or full remineralisation</div>
+      </div>
+
+      <div class="region">
+        <div class="region__name">Tucson<span class="region__name-sub">US</span></div>
+        <div class="region__col"><span class="region__col-label">Character</span>Hard desert-source water</div>
+        <div class="region__col"><span class="region__col-label">Coffee Impact</span>High scale risk; acidity muted significantly</div>
+        <div class="region__col"><span class="region__col-label">Recommendation</span>RO and full remineralisation essential</div>
+      </div>
+
+      <div class="region">
+        <div class="region__name">Bali<span class="region__name-sub">ID</span></div>
+        <div class="region__col"><span class="region__col-label">Character</span>Variable — bottled / filtered often required</div>
+        <div class="region__col"><span class="region__col-label">Coffee Impact</span>Inconsistent extraction</div>
+        <div class="region__col"><span class="region__col-label">Recommendation</span>Test first; TDS and alkalinity to establish baseline</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── HYDRATION FRAMEWORK + MINERALS ───────────────────── -->
+<section class="framework">
+  <div class="section">
+    <div class="section__head">
+      <div>
+        <div class="section__num">06 — Framework</div>
+        <div class="section__label">Hydration Logic · Mineral Palette</div>
+      </div>
+      <div>
+        <h2 class="section__title">The <em>rules</em> behind every response.</h2>
+        <p class="section__lead" style="margin-top:24px;">Deterministic frameworks, not vibes. Duration, sweat, and mineral chemistry drive every plan.</p>
+      </div>
+    </div>
+
+    <div class="framework__grid">
+      <div>
+        <div class="section__label" style="color:var(--ink-dim); margin-bottom:24px;">— Hydration Framework</div>
+
+        <div class="rule">
+          <span class="rule__cond">Duration &lt; 60 min</span>
+          <p class="rule__text">Plain water is usually sufficient unless it is very hot, humid, or the user sweats heavily.</p>
+        </div>
+        <div class="rule">
+          <span class="rule__cond">60 – 120 min</span>
+          <p class="rule__text">Water plus electrolytes — especially sodium — may be useful for longer or sweat-heavy sessions.</p>
+        </div>
+        <div class="rule">
+          <span class="rule__cond">2+ hours</span>
+          <p class="rule__text">Endurance hydration must be planned with fluid, sodium, and carbohydrate together.</p>
+        </div>
+        <div class="rule">
+          <span class="rule__cond">Heavy sweater</span>
+          <p class="rule__text">Heavy sweat, salt marks on clothing, or repeated cramps in heat elevate electrolyte importance.</p>
+        </div>
+        <div class="rule">
+          <span class="rule__cond">Warning — Hyponatremia</span>
+          <p class="rule__text">Over-reliance on plain water during long endurance events is a real risk. Electrolytes are protective, not optional.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="section__label" style="color:var(--ink-dim); margin-bottom:24px;">— Mineral Palette <span style="color:var(--accent); margin-left:8px;">· Food-grade only</span></div>
+
+        <div class="minerals__grid">
+          <div class="mineral">
+            <span class="mineral__formula">MgSO₄</span>
+            <span class="mineral__name">Epsom salt<br/>(food-grade)</span>
+            <span class="mineral__adds">Adds: Mg · SO₄</span>
+          </div>
+          <div class="mineral">
+            <span class="mineral__formula">MgCl₂</span>
+            <span class="mineral__name">Magnesium chloride</span>
+            <span class="mineral__adds">Adds: Mg · Cl</span>
+          </div>
+          <div class="mineral">
+            <span class="mineral__formula">CaCl₂</span>
+            <span class="mineral__name">Calcium chloride</span>
+            <span class="mineral__adds">Adds: Ca · Cl</span>
+          </div>
+          <div class="mineral">
+            <span class="mineral__formula">CaSO₄</span>
+            <span class="mineral__name">Gypsum<br/>(food-grade)</span>
+            <span class="mineral__adds">Adds: Ca · SO₄</span>
+          </div>
+          <div class="mineral">
+            <span class="mineral__formula">NaHCO₃</span>
+            <span class="mineral__name">Sodium bicarbonate</span>
+            <span class="mineral__adds">Adds: Na · HCO₃</span>
+          </div>
+          <div class="mineral">
+            <span class="mineral__formula">KHCO₃</span>
+            <span class="mineral__name">Potassium bicarbonate</span>
+            <span class="mineral__adds">Adds: K · HCO₃</span>
+          </div>
+          <div class="mineral">
+            <span class="mineral__formula">NaCl</span>
+            <span class="mineral__name">Sodium chloride<br/>(food-grade)</span>
+            <span class="mineral__adds">Adds: Na · Cl</span>
+          </div>
+          <div class="mineral">
+            <span class="mineral__formula">KCl</span>
+            <span class="mineral__name">Potassium chloride<br/>(food-grade)</span>
+            <span class="mineral__adds">Adds: K · Cl</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── SAFETY ───────────────────── -->
+<section id="framework" class="safety">
+  <div class="section">
+    <div class="section__head">
+      <div>
+        <div class="section__num">07 — Safety</div>
+        <div class="section__label">Hard Rules · Red Flags · IP</div>
+      </div>
+      <div>
+        <h2 class="section__title">Safety is <em>non-negotiable</em>.</h2>
+        <p class="section__lead" style="margin-top:24px;">Hard rules, red-flag protocols, and IP protection are compiled into every output. No diagnosis, no cures, no exceptions.</p>
+      </div>
+    </div>
+
+    <div class="safety__grid">
+      <ul class="safety__list">
+        <li>General education only — no diagnosis, treatment, or prescriptions.</li>
+        <li>Always refer to medical professional: kidney disease, heart disease, blood pressure, diabetes, pregnancy, diuretics.</li>
+        <li>Never recommend extreme water intake.</li>
+        <li>Never claim water or electrolytes cure disease.</li>
+        <li>No detox, alkaline-cure, or unsubstantiated medical performance claims.</li>
+        <li>Warn about hyponatremia risk during long endurance events with high plain-water intake.</li>
+        <li>Espresso machine profiles must always carry scale and corrosion validation warning.</li>
+        <li>Food-grade minerals only — always state this explicitly.</li>
+      </ul>
+
+      <div class="safety__side">
+        <aside class="redflag">
+          <h3 class="redflag__title">⚠ Red-Flag Symptoms</h3>
+          <ul class="redflag__list">
+            <li>Confusion or disorientation</li>
+            <li>Fainting or loss of consciousness</li>
+            <li>Chest pain</li>
+            <li>Persistent vomiting</li>
+            <li>Severe weakness</li>
+          </ul>
+          <p class="redflag__action">→ Direct immediately to emergency medical care. Do not continue hydration guidance.</p>
+        </aside>
+
+        <aside class="ippanel">
+          <h3 class="ippanel__title">◈ Protected IP</h3>
+          <ul class="ippanel__list">
+            <li>Exact ÆGX20 formulas</li>
+            <li>Exact electrolyte sachet recipes</li>
+            <li>Exact hydration product recipes</li>
+            <li>NeuroBrew formulas</li>
+            <li>Unreleased Blackfeather.run protocols</li>
+            <li>Supplier costs and manufacturing methods</li>
+            <li>Internal testing results and research</li>
+            <li>Proprietary Aether Water OS algorithms</li>
+          </ul>
+          <p class="ippanel__refusal">“I can't provide protected Æ-G or Blackfeather formulation or IP. I can give you a safe general hydration or water framework instead.”</p>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── ARCHITECTURE ───────────────────── -->
+<section>
+  <div class="section">
+    <div class="section__head">
+      <div>
+        <div class="section__num">08 — Architecture</div>
+        <div class="section__label">Six-Layer Stack</div>
+      </div>
+      <div>
+        <h2 class="section__title">Conversation, calculation, <em>conscience</em>.</h2>
+        <p class="section__lead" style="margin-top:24px;">ÆG-AQUILA is not a chatbot with opinions. It is a six-layer engine where language, math, and safety each have their own domain.</p>
+      </div>
+    </div>
+
+    <div class="arch__stack">
+      <div class="layer">
+        <div class="layer__num">L · 01</div>
+        <div class="layer__name">LLM Conversation Layer</div>
+        <div class="layer__resp">Understand intent, ask follow-up questions, explain concepts, structure outputs in plain language.</div>
+      </div>
+      <div class="layer">
+        <div class="layer__num">L · 02</div>
+        <div class="layer__name">Deterministic Calculator</div>
+        <div class="layer__resp">ppm conversions, hardness and alkalinity as CaCO₃, mineral dosing, batch scaling, concentrate dilution, blending ratios.</div>
+      </div>
+      <div class="layer">
+        <div class="layer__num">L · 03</div>
+        <div class="layer__name">Safety Rules Engine</div>
+        <div class="layer__resp">Block unsafe hydration advice, medical claims, extreme intake recommendations, espresso risk without warning, IP leakage.</div>
+      </div>
+      <div class="layer">
+        <div class="layer__num">L · 04</div>
+        <div class="layer__name">Knowledge Base</div>
+        <div class="layer__resp">Hydration frameworks, bottled water rules, coffee water targets, regional profiles, IP policies, response templates.</div>
+      </div>
+      <div class="layer">
+        <div class="layer__num">L · 05</div>
+        <div class="layer__name">User Memory Layer</div>
+        <div class="layer__resp">Save preferences, sweat tendency, water source, saved bottled waters, coffee methods, training routines.</div>
+      </div>
+      <div class="layer">
+        <div class="layer__num">L · 06</div>
+        <div class="layer__name">Admin Layer</div>
+        <div class="layer__resp">Manage public profile targets, update guardrails, review flagged sessions, maintain knowledge base.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── ROADMAP ───────────────────── -->
+<section id="roadmap" class="profiles">
+  <div class="section">
+    <div class="section__head">
+      <div>
+        <div class="section__num">09 — Roadmap</div>
+        <div class="section__label">Four Phases</div>
+      </div>
+      <div>
+        <h2 class="section__title">From <em>prototype</em> to product.</h2>
+        <p class="section__lead" style="margin-top:24px;">Agent first. Calculators second. Portal third. Physical product last. Every phase hardens the next.</p>
+      </div>
+    </div>
+
+    <div class="roadmap__timeline">
+      <div class="phase">
+        <div class="phase__num">01</div>
+        <h3 class="phase__name">Agent Prototype</h3>
+        <ul class="phase__list">
+          <li>Hydration-first mode selector</li>
+          <li>Daily hydration support</li>
+          <li>Blackfeather.run hydration plan</li>
+          <li>Endurance and sweat-loss guidance</li>
+          <li>Bottled water assessment (drinking)</li>
+          <li>Electrolyte education</li>
+          <li>IP protection layer</li>
+          <li>Secondary coffee-water modes</li>
+          <li>Response templates and safety disclaimers</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="phase__num">02</div>
+        <h3 class="phase__name">Calculator-Backed Prototype</h3>
+        <ul class="phase__list">
+          <li>Bottled water blending estimates</li>
+          <li>TDS and dilution calculations</li>
+          <li>Coffee water remineralisation using public targets</li>
+          <li>Safety and threshold validation engine</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="phase__num">03</div>
+        <h3 class="phase__name">Aether Portal Integration</h3>
+        <ul class="phase__list">
+          <li>User accounts and saved hydration profiles</li>
+          <li>Training and sweat feedback logs</li>
+          <li>Saved bottled water labels</li>
+          <li>Bottle Scan Mode</li>
+          <li>Regional Water Atlas</li>
+          <li>Coffee recipe cards and QR outputs</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="phase__num">04</div>
+        <h3 class="phase__name">Physical Products</h3>
+        <ul class="phase__list">
+          <li>ÆG Water Test Kit</li>
+          <li>ÆG Mineral Drops</li>
+          <li>ÆG Regional Sachets</li>
+          <li>ÆG Café Tank Packs</li>
+          <li>ÆG Coffee Pairing Packs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────── ENGAGE ───────────────────── -->
+<section id="engage">
+  <div class="section" style="text-align:center; max-width:880px;">
+    <div class="section__num" style="margin-bottom:32px;">10 — Engage</div>
+    <h2 class="section__title" style="font-size:clamp(44px,7vw,96px); margin-bottom:32px;">Control water. <em>Control outcome.</em></h2>
+    <p class="section__lead" style="margin:0 auto 48px; font-size:20px;">ÆG-AQUILA is moving through prototype now. If you brew seriously, train seriously, or run a café, the agent is being built with you in mind.</p>
+    <a href="mailto:engage@blackfeather.run" class="nav__cta" style="font-size:13px; padding:16px 28px; display:inline-block;">Request the early protocol →</a>
+  </div>
+</section>
+
+<!-- ───────────────────── FOOTER ───────────────────── -->
+<footer class="footer">
+  <div class="footer__grid">
+    <div>
+      <h3 class="footer__mark"><em>ÆG</em>—AQUILA</h3>
+      <p class="footer__tagline">Guard your water. Master your flow.</p>
+    </div>
+    <div>
+      <h4 class="footer__col-title">Ecosystem</h4>
+      <ul class="footer__list">
+        <li>Æ-G</li>
+        <li>Blackfeather.run</li>
+        <li>Aether Water OS</li>
+        <li>AquaForge</li>
+        <li>Water Atlas</li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer__col-title">Assets</h4>
+      <ul class="footer__list">
+        <li>ÆG-AQUILA · Agent</li>
+        <li>ÆG-FLOW · First sachet</li>
+        <li>ÆG-AETHERIS · AetherIQ agent</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <span>© ÆG-AQUILA v1.0 · Build Handoff</span>
+    <span>General education only · Not medical advice</span>
+  </div>
+</footer>
+
+<script>
+  // Tab switcher
+  const tabs = document.querySelectorAll('.tab');
+  const groups = document.querySelectorAll('.mode-group');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach(t => t.classList.toggle('active', t === tab));
+      groups.forEach(g => g.classList.toggle('active', g.dataset.group === target));
+    });
+  });
+
+  // Reveal on scroll (respects prefers-reduced-motion)
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealEls = document.querySelectorAll('.reveal, .mode-card, .profile, .phase, .layer, .region, .mineral, .rule');
+  if (prefersReducedMotion) {
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  } else {
+    revealEls.forEach(el => el.classList.add('reveal'));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => io.observe(el));
+  }
+
+  // Staggered reveal inside grids
+  document.querySelectorAll('.modes__grid, .profiles__grid, .minerals__grid, .roadmap__timeline').forEach(grid => {
+    [...grid.children].forEach((child, i) => {
+      child.style.transitionDelay = (i * 60) + 'ms';
+    });
+  });
+
+  /* ───────────────────── AQUAFORGE ENGINE ───────────────────── */
+  // Mineral dose coefficients: ppm CaCO3 equivalent per 0.01 g/L (approximate, educational)
+  // These are derived from standard brewing-water chemistry:
+  //   MgSO4·7H2O (246.48 g/mol) · 0.01 g/L = ~4.06 ppm hardness as CaCO3
+  //   CaSO4·2H2O (172.17 g/mol) · 0.01 g/L = ~5.81 ppm hardness as CaCO3
+  //   CaCl2       (110.98 g/mol) · 0.01 g/L = ~9.01 ppm hardness as CaCO3
+  //   NaHCO3      (84.01 g/mol)  · 0.01 g/L = ~5.95 ppm alkalinity as CaCO3
+  //   NaCl        · adds TDS only (~100 ppm per 0.01 g/L of Na equiv.)
+  const PROFILES = {
+    clarity:   { name: 'ÆG <em>Clarity</em>',          tds: 85,  hard: 62,  alk: 32, recipe: [
+      { f: 'MgSO₄·7H₂O', n: 'Epsom salt (food-grade)',    gpl: 0.152 },
+      { f: 'NaHCO₃',     n: 'Sodium bicarbonate',          gpl: 0.054 }
+    ]},
+    structure: { name: 'ÆG <em>Structure</em>',        tds: 120, hard: 85,  alk: 50, recipe: [
+      { f: 'MgSO₄·7H₂O', n: 'Epsom salt (food-grade)',    gpl: 0.105 },
+      { f: 'CaSO₄·2H₂O', n: 'Gypsum (food-grade)',         gpl: 0.076 },
+      { f: 'NaHCO₃',     n: 'Sodium bicarbonate',          gpl: 0.084 }
+    ]},
+    velvet:    { name: 'ÆG <em>Velvet</em>',           tds: 140, hard: 100, alk: 62, recipe: [
+      { f: 'CaSO₄·2H₂O', n: 'Gypsum (food-grade)',         gpl: 0.138 },
+      { f: 'MgSO₄·7H₂O', n: 'Epsom salt (food-grade)',    gpl: 0.049 },
+      { f: 'NaHCO₃',     n: 'Sodium bicarbonate',          gpl: 0.104 }
+    ]},
+    neon:      { name: 'ÆG <em>Neon Fruit</em>',        tds: 100, hard: 75,  alk: 30, recipe: [
+      { f: 'MgSO₄·7H₂O', n: 'Epsom salt (food-grade)',    gpl: 0.184 },
+      { f: 'NaHCO₃',     n: 'Sodium bicarbonate',          gpl: 0.050 }
+    ]},
+    cold:      { name: 'ÆG <em>Cold Forge</em>',        tds: 125, hard: 90,  alk: 57, recipe: [
+      { f: 'MgSO₄·7H₂O', n: 'Epsom salt (food-grade)',    gpl: 0.110 },
+      { f: 'CaSO₄·2H₂O', n: 'Gypsum (food-grade)',         gpl: 0.077 },
+      { f: 'NaHCO₃',     n: 'Sodium bicarbonate',          gpl: 0.096 }
+    ]},
+    shield:    { name: 'ÆG <em>Espresso Shield</em>',   tds: 95,  hard: 55,  alk: 45, recipe: [
+      { f: 'CaCl₂',      n: 'Calcium chloride (food-grade)', gpl: 0.045 },
+      { f: 'MgSO₄·7H₂O', n: 'Epsom salt (food-grade)',    gpl: 0.085 },
+      { f: 'NaHCO₃',     n: 'Sodium bicarbonate',          gpl: 0.076 }
+    ]}
+  };
+
+  let forgeState = { profile: 'clarity', batch: 1, method: 'ro' };
+
+  const forgeName = document.getElementById('forgeName');
+  const forgeTDS = document.getElementById('forgeTDS');
+  const forgeHard = document.getElementById('forgeHard');
+  const forgeAlk = document.getElementById('forgeAlk');
+  const forgeRecipe = document.getElementById('forgeRecipe');
+  const forgeBatchLabel = document.getElementById('forgeBatchLabel');
+
+  function formatGrams(g) {
+    if (g >= 1) return g.toFixed(2);
+    if (g >= 0.1) return g.toFixed(3);
+    return g.toFixed(4);
+  }
+
+  function renderForge() {
+    const p = PROFILES[forgeState.profile];
+    const batch = forgeState.batch;
+    // If starting from soft municipal, reduce doses by ~25% to account for existing minerals
+    const factor = forgeState.method === 'soft' ? 0.75 : 1;
+
+    forgeName.innerHTML = p.name;
+    forgeTDS.textContent  = p.tds;
+    forgeHard.textContent = p.hard;
+    forgeAlk.textContent  = p.alk;
+    forgeBatchLabel.textContent = 'BATCH · ' + batch.toFixed(2) + ' L';
+
+    forgeRecipe.innerHTML = p.recipe.map(r => {
+      const grams = r.gpl * batch * factor;
+      const mg = grams * 1000;
+      const displayGrams = formatGrams(grams);
+      const displayMg = mg.toFixed(mg < 10 ? 2 : mg < 100 ? 1 : 0);
+      return `
+        <li>
+          <span class="forge__recipe-formula">${r.f}</span>
+          <span class="forge__recipe-name">${r.n}</span>
+          <span class="forge__recipe-grams">${displayGrams}<span class="forge__recipe-grams-unit"> g · ${displayMg} mg</span></span>
+        </li>
+      `;
+    }).join('');
+
+    // pulse animation on values
+    [forgeTDS, forgeHard, forgeAlk, forgeBatchLabel].forEach(el => {
+      el.style.transition = 'none';
+      el.style.color = '#bef3ff';
+      requestAnimationFrame(() => {
+        el.style.transition = 'color .6s ease';
+        el.style.color = '';
+      });
+    });
+  }
+
+  document.querySelectorAll('#forgeProfiles .forge__profile-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#forgeProfiles .forge__profile-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      forgeState.profile = btn.dataset.profile;
+      renderForge();
+    });
+  });
+  document.querySelectorAll('#forgeBatch .forge__batch-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#forgeBatch .forge__batch-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      forgeState.batch = parseFloat(btn.dataset.batch);
+      renderForge();
+    });
+  });
+  document.querySelectorAll('#forgeMethod .forge__method-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#forgeMethod .forge__method-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      forgeState.method = btn.dataset.method;
+      renderForge();
+    });
+  });
+
+  renderForge();
+</script>
+
+</body>
+</html>
